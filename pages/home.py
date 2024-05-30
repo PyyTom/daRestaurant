@@ -55,6 +55,7 @@ def Home(page:fl.Page,params:Params,basket:Basket):
             tot=db.execute('select sum(PRICE) from OPEN where ROOM=? and N_TABLE=?',(d_rooms.value,d_tables.value,)).fetchone()
             db.execute('insert into BILLS values(?,?,?,?,?)',(t_user.value,d_rooms.value,d_tables.value,t_time.value,tot[0]))
             db.commit()
+            if os.path.exists('bills')=False:os.makedirs('bills')
             bill_file=open('bills/'+t_time.value+' - '+d_rooms.value+' - '+d_tables.value+'.txt','w')
             bill_file.write('daRestaurant - '+t_time.value+'\n'+t_user.value+' - '+d_rooms.value+' - '+d_tables.value+'\n\n')
             for row in db.execute('select * from OPEN where ROOM=? and N_TABLE=?',(d_rooms.value,d_tables.value,)).fetchone():bill_file.write(row[4]+' - '+row[5]+' $.'+row[6])
